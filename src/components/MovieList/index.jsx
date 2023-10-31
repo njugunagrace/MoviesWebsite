@@ -1,85 +1,85 @@
 import React, { useState, useEffect } from "react";
-import { getMovies } from "../../utils/utilities";
-import ImageContainer from "../../atoms/Image-container";
-import './style.css';
-
-
+import { getMovies, getGenres } from "../../utils/utilities";
+import { Link } from "react-router-dom";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import "./style.css";
 
 const IMAGE_BASE_URL = process.env.REACT_APP_IMAGE_BASE_URL;
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+const ACCESS_TOKEN = process.env.REACT_APP_ACCESS_TOKEN;
 
 const MovieList = () => {
-    const [movies, setMovies] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [filteredMovies, setFilteredMovies] = useState([]);
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [genres, setGenres] = useState([]);
+  const [selectedGenre, setSelectedGenre] = useState("");
 
-    const handleSearch = (event) => {
-        let searchValue = event.target.value.trim().toLowerCase();
-        if (searchValue === "") {
-            setFilteredMovies(movies);
-        } else {
-            let filteredMovies = movies.filter(item => item.title.toLowerCase().includes(searchValue));
-            setFilteredMovies(filteredMovies);
-        }
+  useEffect(() => {
+    fetchMovies();
+    fetchGenres();
+  }, [selectedGenre]);
+
+  const fetchMovies = async () => {
+    setLoading(true);
+    try {
+      const fetchedMovies = await getMovies(selectedGenre);
+      setMovies(fetchedMovies.results);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching movies:", error.message);
+      setLoading(false);
     }
+  };
 
-    useEffect(() => {
-        (async () => {
-            setLoading(true);
-            const movies = await getMovies();
-            setMovies(movies.results);
-            setFilteredMovies(movies.results);
-            setLoading(false);
-            console.log({ movies });
-        })();
-    }, []);
-
-    if (loading) {
-        return <h1>Loading....</h1>
+  const fetchGenres = async () => {
+    try {
+      const fetchedGenres = await getGenres();
+      setGenres(fetchedGenres.genres);
+    } catch (error) {
+      console.error("Error fetching genres:", error.message);
     }
+  };
 
-    const firstMovie = filteredMovies[2];
-    const imageUrl = firstMovie ? `${IMAGE_BASE_URL}/${firstMovie.poster_path}` : '';
+  const handleGenreChange = (event) => {
+    const selectedGenreId = event.target.value;
+    setSelectedGenre(selectedGenreId);
+  };
 
+  if (loading) {
+    return <h1 className="loading">Loading ...</h1>;
+  }
 
-
-    return (
-        <div>
-
-
-            <div className="nav">
-                <p className="mov">M<span id="movie">oo</span>vie</p>
-                <input type="search" placeholder="Search" onChange={handleSearch}></input>
-                <p>Home</p>
-                <p>My List</p>
-                <button>Sign In</button>
-            </div>
-
-
-            <div className="imageHolder">
-                {imageUrl && <img src={imageUrl} alt={firstMovie.title} className="upperImage"/>}
-                 
-            </div>
-
-            <div className="butt">
-                <button>All</button>
-                <button>Action</button>
-                <button>Comedy</button>
-                <button>Arabic</button>
-                <button>series</button>
-                <button>Adventure</button>
-                <button>Other</button>
-            </div>
-
-
-            <div className="image-container">
-                {loading === false && filteredMovies.length > 0 && filteredMovies.map(
-                    item => (
-                        <ImageContainer props={item} key={item.id} />
-                    )
-                )}
-            </div>
-        </div>
-    );
+  return (
+    <div>
+      {}
+      <div className="genreNavbar">
+        {genres.map((genre) => (
+          <div
+            key={genre.id}
+            className={`genreNavItem ${genre.id === selectedGenre ? "active" : ""}`}
+            onClick={() => setSelectedGenre(genre.id)}
+          >
+            {genre.name}
+          </div>
+        ))}
+      </div>
+      {}
+      <div className="imageContainer">
+        {movies && movies.length > 0 ? (
+          movies.map((item) => (
+            <Link to={`/MovieDetails/${item.id}`} key={item.id}>
+              <div className="images">
+                <img src={`${IMAGE_BASE_URL}${item.poster_path}`} alt={item.title} />
+              </div>
+            </Link>
+          ))
+        ) : (
+          <h3>No movies found for the selected genre.</h3>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default MovieList;

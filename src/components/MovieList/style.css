@@ -1,64 +1,54 @@
-body{
-    background-color: rgb(19, 19, 18);
-}
+/* google fonts */
+@import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;1,100;1,200;1,300;1,400&family=Karla:ital,wght@0,200;0,300;0,400;0,500;0,600;1,200;1,300;1,400;1,500&family=Playfair+Display+SC:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;1,100;1,200;1,300;1,400&family=Karla:ital,wght@0,500;0,600;1,400;1,500&family=Playfair+Display+SC:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
 
-.image-container{
+
+.imageContainer{
     display: grid;
-    grid-template-columns: repeat(4 ,1fr);
+    grid-template-columns: repeat(4,1fr);
     gap: 2%;
+    margin: 2em;
+    font-family: 'Karla', sans-serif;
 }
-.images{
-    width: 90%;
-    overflow: hidden;
-}
-img{
+.imageContainer img{
     width: 100%;
     height: auto;
     object-fit: cover;
 }
-.nav{
-    padding: 3%;
-    display: flex;
-    gap: 150px;
-    margin-left: 80px;
-}
-.nav input{
-    padding: 0 200px ;
-    border-radius: 10px;
-}
-.nav button{
-    padding: 15px 30px ;
-    background-color: gold;
-    border: none;
-    border-radius: 10px;
-}
-.nav p{
-    color: white;
-}
-#movie{
-    color: gold;
-}
-.upperImage{
-    height: 1%;
-    width: 50%;
-    margin-left: 3%;
-    
-}
-.imageHolder{
-    height: 1%;
-    width: 100%;
-    /* background-color: antiquewhite; */
-    margin-bottom: 3%;
-}    
-.butt{
-    gap: 20em;
-    margin-bottom: 2%;
-}
-.butt button{
-    padding: 1.5%;
-    margin-left: 4%;
-    border-radius: 10px;
-    border: none;
-    width: 10%;
 
+  .genreNavItem {
+    display: inline-block;
+    padding: .5em 1.4em;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 20px;
+    font-size: .8em; 
+    color: #fff;
+    background-color: #393939;
+    border: 2px solid #393939;
+    transition: background-color 0.3s;
+    font-family: 'Karla', sans-serif;
+  }
+  
+  .genreNavItem:hover {
+    background-color: #39393977;
+  }
+  
+  .genreNavItem.active {
+    background-color: #f0ae27;
+    border: 2px solid #f0ae27;
+  }
+
+.loading{
+    display: grid;
+    place-items: center;
+    font-size: 1.2em;
+    color: #f0ae27;
+    margin-top: 5em;
+    font-family: 'Karla', sans-serif;
 }
+
+
+
+
+
